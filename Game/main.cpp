@@ -5,6 +5,11 @@
 #define WIDTH 640
 #define HEIGHT 480
 
+#define RENDER_WIDTH 160
+#define RENDER_HEIGHT 120
+
+#define UNIT_SIZE 8
+
 int main(int argc, char* argv[]) {
     SDL_Rect dstrect = { 0 };
     dstrect.x = 0;
@@ -14,6 +19,8 @@ int main(int argc, char* argv[]) {
 
     uint8_t* rt_pixels = { 0 };
     int rt_pitch = { 0 };
+
+    TLN_Spriteset spriteset;
 
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -35,13 +42,19 @@ int main(int argc, char* argv[]) {
     }
 
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED + SDL_RENDERER_PRESENTVSYNC);
-    SDL_Texture* backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+    SDL_Texture* backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, RENDER_WIDTH, RENDER_HEIGHT);
 
     // Main loop flag
     bool quit = false;
     SDL_Event event;
 
-    TLN_Init(WIDTH, HEIGHT, 2, 0, 0);
+    TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, 64, 0);
+    TLN_SetLoadPath("assets/sprites");
+
+    spriteset = TLN_LoadSpriteset("snake");
+    TLN_SetSpriteSet(0, spriteset);
+
+    TLN_SetBGColor(0, 128, 238);
 
     // Main application loop
     while (!quit) {
@@ -56,7 +69,9 @@ int main(int argc, char* argv[]) {
 
         // Tilengine Draw Begin
         TLN_SetRenderTarget(rt_pixels, rt_pitch);
-        TLN_SetBGColor(0, 128, 238);
+
+        TLN_SetSpritePicture(0, 0);
+
         TLN_UpdateFrame(0);
         // Tilengine Draw End
 
@@ -66,6 +81,8 @@ int main(int argc, char* argv[]) {
         SDL_RenderCopy(renderer, backbuffer, NULL, &dstrect);
         SDL_RenderPresent(renderer);
     }
+
+    TLN_DeleteSpriteset(spriteset);
 
     TLN_Deinit();
 
