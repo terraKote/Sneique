@@ -1,6 +1,8 @@
 #include <iostream>
+#include <deque>
 #include <SDL.h>
 #include <Tilengine.h>
+#include <vectormath.hpp>
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -27,8 +29,8 @@ int main(int argc, char* argv[]) {
 	dstrect.w = WIDTH;
 	dstrect.h = HEIGHT;
 
-	int x = 0;
-	int y = 0;
+	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0,0}, Vectormath::Vector2{8,0}, Vectormath::Vector2{16,0} };
+	Vectormath::Vector2 velocity = { 0, 0 };
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
@@ -71,7 +73,8 @@ int main(int argc, char* argv[]) {
 
 	spriteset = TLN_LoadSpriteset("snake");
 	TLN_SetSpriteSet(0, spriteset);
-	TLN_SetSpritePicture(0, 0);
+	TLN_SetSpriteSet(1, spriteset);
+	TLN_SetSpriteSet(2, spriteset);
 
 	TLN_SetBGColor(0, 0, 0);
 
@@ -90,22 +93,18 @@ int main(int argc, char* argv[]) {
 				{
 				case SDLK_UP:
 					currentDirection = Direction::Up;
-					TLN_SetSpritePicture(0, 0);
 					break;
 
 				case SDLK_LEFT:
 					currentDirection = Direction::Left;
-					TLN_SetSpritePicture(0, 1);
 					break;
 
 				case SDLK_DOWN:
 					currentDirection = Direction::Down;
-					TLN_SetSpritePicture(0, 2);
 					break;
 
 				case SDLK_RIGHT:
 					currentDirection = Direction::Right;
-					TLN_SetSpritePicture(0, 3);
 					break;
 				}
 				break;
@@ -114,7 +113,7 @@ int main(int argc, char* argv[]) {
 
 		// Game loop limit
 		int ticksToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPassed);
-		
+
 		if (ticksToWait > 0 && ticksToWait <= MILLISECONDS_PER_FRAME)
 		{
 			SDL_Delay(ticksToWait);
@@ -123,7 +122,7 @@ int main(int argc, char* argv[]) {
 		double deltaTime = (SDL_GetTicks() - millisecondsPassed) / 1000.0;
 
 		millisecondsPassed = SDL_GetTicks();
-		
+
 		// Game logic
 		currentMoveTime += deltaTime;
 
@@ -131,22 +130,34 @@ int main(int argc, char* argv[]) {
 			switch (currentDirection)
 			{
 			case Up:
-				y -= UNIT_SIZE;
+				velocity.setY(-UNIT_SIZE);
 				break;
 			case Left:
-				x -= UNIT_SIZE;
+				velocity.setX(-UNIT_SIZE);
 				break;
 			case Down:
-				y += UNIT_SIZE;
+				velocity.setY(UNIT_SIZE);
 				break;
 			case Right:
-				x += UNIT_SIZE;
+				velocity.setX(UNIT_SIZE);
 				break;
 			}
 			currentMoveTime = 0;
 		}
 
-		TLN_SetSpritePosition(0, x, y);
+		for (unsigned int i = 0; i < snakeBody.size(); i++) {
+			Vectormath::Vector2 point = snakeBody[i];
+
+			int spriteIndex = currentDirection;
+
+			if (i != 0)
+			{
+				spriteIndex = 4;
+			}
+
+			TLN_SetSpritePicture(i, spriteIndex);
+			TLN_SetSpritePosition(i, point.getX(), point.getY());
+		}
 
 		// Render
 		SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);
