@@ -128,7 +128,21 @@ int main(int argc, char* argv[]) {
 		currentMoveTime += deltaTime;
 
 		if (currentMoveTime >= moveTime) {
-			x += UNIT_SIZE;
+			switch (currentDirection)
+			{
+			case Up:
+				y -= UNIT_SIZE;
+				break;
+			case Left:
+				x -= UNIT_SIZE;
+				break;
+			case Down:
+				y += UNIT_SIZE;
+				break;
+			case Right:
+				x += UNIT_SIZE;
+				break;
+			}
 			currentMoveTime = 0;
 		}
 
