@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 	dstrect.w = WIDTH;
 	dstrect.h = HEIGHT;
 
-	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0,0}, Vectormath::Vector2{8,0}, Vectormath::Vector2{16,0} };
+	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0,0}, Vectormath::Vector2{1,0}, Vectormath::Vector2{2,0} };
 	Vectormath::Vector2 velocity = { 0, 0 };
 
 	uint8_t* rt_pixels = { 0 };
@@ -130,18 +130,27 @@ int main(int argc, char* argv[]) {
 			switch (currentDirection)
 			{
 			case Up:
-				velocity.setY(-UNIT_SIZE);
+				velocity.setX(0);
+				velocity.setY(-1);
 				break;
 			case Left:
-				velocity.setX(-UNIT_SIZE);
+				velocity.setX(-1);
+				velocity.setY(0);
 				break;
 			case Down:
-				velocity.setY(UNIT_SIZE);
+				velocity.setX(0);
+				velocity.setY(1);
 				break;
 			case Right:
-				velocity.setX(UNIT_SIZE);
+				velocity.setX(1);
+				velocity.setY(0);
 				break;
 			}
+
+			snakeBody.pop_back();
+			Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX(), snakeBody[0].getY() + velocity.getY() };
+			snakeBody.push_front(headPosition);
+
 			currentMoveTime = 0;
 		}
 
@@ -156,7 +165,7 @@ int main(int argc, char* argv[]) {
 			}
 
 			TLN_SetSpritePicture(i, spriteIndex);
-			TLN_SetSpritePosition(i, point.getX(), point.getY());
+			TLN_SetSpritePosition(i, point.getX() * UNIT_SIZE, point.getY() * UNIT_SIZE);
 		}
 
 		// Render
