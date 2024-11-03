@@ -11,86 +11,116 @@
 #define UNIT_SIZE 8
 
 int main(int argc, char* argv[]) {
-    SDL_Rect dstrect = { 0 };
-    dstrect.x = 0;
-    dstrect.y = 0;
-    dstrect.w = WIDTH;
-    dstrect.h = HEIGHT;
+	SDL_Rect dstrect = { 0 };
+	dstrect.x = 0;
+	dstrect.y = 0;
+	dstrect.w = WIDTH;
+	dstrect.h = HEIGHT;
 
-    uint8_t* rt_pixels = { 0 };
-    int rt_pitch = { 0 };
+	int x = 0;
+	int y = 0;
 
-    TLN_Spriteset spriteset;
+	uint8_t* rt_pixels = { 0 };
+	int rt_pitch = { 0 };
 
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-        return 1;
-    }
+	TLN_Spriteset spriteset;
 
-    // Create a window
-    SDL_Window* window = SDL_CreateWindow("Snake Game",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        WIDTH, HEIGHT,
-        SDL_WINDOW_SHOWN);
+	// Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
 
-    if (window == nullptr) {
-        std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
-    }
+	// Create a window
+	SDL_Window* window = SDL_CreateWindow("Snake Game",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		WIDTH, HEIGHT,
+		SDL_WINDOW_SHOWN);
 
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED + SDL_RENDERER_PRESENTVSYNC);
-    SDL_Texture* backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, RENDER_WIDTH, RENDER_HEIGHT);
+	if (window == nullptr) {
+		std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+		SDL_Quit();
+		return 1;
+	}
 
-    // Main loop flag
-    bool quit = false;
-    SDL_Event event;
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED + SDL_RENDERER_PRESENTVSYNC);
+	SDL_Texture* backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, RENDER_WIDTH, RENDER_HEIGHT);
 
-    TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, 64, 0);
-    TLN_SetLoadPath("assets/sprites");
+	// Main loop flag
+	bool quit = false;
+	SDL_Event evt;
 
-    spriteset = TLN_LoadSpriteset("snake");
-    TLN_SetSpriteSet(0, spriteset);
+	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, 64, 0);
+	TLN_SetLoadPath("assets/sprites");
 
-    TLN_SetBGColor(0, 128, 238);
+	spriteset = TLN_LoadSpriteset("snake");
+	TLN_SetSpriteSet(0, spriteset);
+	TLN_SetSpritePicture(0, 0);
 
-    // Main application loop
-    while (!quit) {
-        // Event processing
-        while (SDL_PollEvent(&event) != 0) {
-            if (event.type == SDL_QUIT) {
-                quit = true;
-            }
-        }
+	TLN_SetBGColor(0, 0, 0);
 
-        SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);
+	// Main application loop
+	while (!quit) {
+		// Event processing
+		while (SDL_PollEvent(&evt) != 0) {
+			switch (evt.type) {
+			case SDL_QUIT:
+				quit = true;
+				break;
 
-        // Tilengine Draw Begin
-        TLN_SetRenderTarget(rt_pixels, rt_pitch);
+			case SDL_KEYDOWN:
+				SDL_KeyboardEvent* keybevt = (SDL_KeyboardEvent*)&evt;
+				switch (keybevt->keysym.sym)
+				{
+				case SDLK_LEFT:
+					x--;
+					break;
 
-        TLN_SetSpritePicture(0, 0);
+				case SDLK_RIGHT:
+					x++;
+					break;
 
-        TLN_UpdateFrame(0);
-        // Tilengine Draw End
+				case SDLK_UP:
+					y--;
+					break;
 
-        SDL_UnlockTexture(backbuffer);
-        SDL_RenderClear(renderer);
-        SDL_SetTextureBlendMode(backbuffer, SDL_BLENDMODE_NONE);
-        SDL_RenderCopy(renderer, backbuffer, NULL, &dstrect);
-        SDL_RenderPresent(renderer);
-    }
+				case SDLK_DOWN:
+					y++;
+					break;
+				}
+				break;
+			}
+		}
 
-    TLN_DeleteSpriteset(spriteset);
+		TLN_SetSpritePosition(0, x, y);
 
-    TLN_Deinit();
 
-    // Destroy the window and quit SDL
-    SDL_DestroyTexture(backbuffer);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+		// Render
+		SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);
 
-    return 0;
+		// Tilengine Draw Begin
+		TLN_SetRenderTarget(rt_pixels, rt_pitch);
+
+		TLN_UpdateFrame(0);
+		// Tilengine Draw End
+
+		SDL_UnlockTexture(backbuffer);
+		SDL_RenderClear(renderer);
+		SDL_SetTextureBlendMode(backbuffer, SDL_BLENDMODE_NONE);
+		SDL_RenderCopy(renderer, backbuffer, NULL, &dstrect);
+		SDL_RenderPresent(renderer);
+	}
+
+	TLN_DeleteSpriteset(spriteset);
+
+	TLN_Deinit();
+
+	// Destroy the window and quit SDL
+	SDL_DestroyTexture(backbuffer);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+
+	return 0;
 }
