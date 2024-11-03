@@ -10,6 +10,9 @@
 
 #define UNIT_SIZE 8
 
+const int FPS = 60;
+const int MILLISECONDS_PER_FRAME = 1000 / FPS;
+
 enum Direction {
 	Up,
 	Left,
@@ -30,6 +33,7 @@ int main(int argc, char* argv[]) {
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
 	Direction currentDirection = Direction::Up;
+	int millisecondsPassed = 0;
 
 	TLN_Spriteset spriteset;
 
@@ -104,6 +108,21 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
+
+		// Game loop limit
+		int ticksToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPassed);
+		
+		if (ticksToWait > 0 && ticksToWait <= MILLISECONDS_PER_FRAME)
+		{
+			SDL_Delay(ticksToWait);
+		}
+
+		double deltaTime = (SDL_GetTicks() - millisecondsPassed) / 1000.0;
+
+		millisecondsPassed = SDL_GetTicks();
+		
+		// Game logic
+		x += 80 * deltaTime;
 
 		TLN_SetSpritePosition(0, x, y);
 
