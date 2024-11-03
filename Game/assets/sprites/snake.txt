@@ -1,1 +1,5 @@
-snake = 40 24 8 8
+snakeUp = 8 24 8 8
+snakeLeft = 16 24 8 8
+snakeDown = 24 24 8 8
+snakeRight = 32 24 8 8
+snakeBody = 40 24 8 8
