@@ -10,6 +10,13 @@
 
 #define UNIT_SIZE 8
 
+enum Direction {
+	Up,
+	Left,
+	Down,
+	Right
+};
+
 int main(int argc, char* argv[]) {
 	SDL_Rect dstrect = { 0 };
 	dstrect.x = 0;
@@ -22,6 +29,7 @@ int main(int argc, char* argv[]) {
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
+	Direction currentDirection = Direction::Up;
 
 	TLN_Spriteset spriteset;
 
@@ -73,20 +81,24 @@ int main(int argc, char* argv[]) {
 				SDL_KeyboardEvent* keybevt = (SDL_KeyboardEvent*)&evt;
 				switch (keybevt->keysym.sym)
 				{
-				case SDLK_LEFT:
-					x--;
-					break;
-
-				case SDLK_RIGHT:
-					x++;
-					break;
-
 				case SDLK_UP:
-					y--;
+					currentDirection = Direction::Up;
+					TLN_SetSpritePicture(0, 0);
+					break;
+
+				case SDLK_LEFT:
+					currentDirection = Direction::Left;
+					TLN_SetSpritePicture(0, 1);
 					break;
 
 				case SDLK_DOWN:
-					y++;
+					currentDirection = Direction::Down;
+					TLN_SetSpritePicture(0, 2);
+					break;
+
+				case SDLK_RIGHT:
+					currentDirection = Direction::Right;
+					TLN_SetSpritePicture(0, 3);
 					break;
 				}
 				break;
@@ -94,7 +106,6 @@ int main(int argc, char* argv[]) {
 		}
 
 		TLN_SetSpritePosition(0, x, y);
-
 
 		// Render
 		SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);
