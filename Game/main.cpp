@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 	Direction currentDirection = Direction::Up;
 	int millisecondsPassed = 0;
 
-	double moveTime = 0.3;
+	double moveTime = 0.15;
 	double currentMoveTime = 0.0;
 
 	TLN_Spriteset spriteset;
@@ -92,18 +92,26 @@ int main(int argc, char* argv[]) {
 				switch (keybevt->keysym.sym)
 				{
 				case SDLK_UP:
+					velocity.setX(0);
+					velocity.setY(-1);
 					currentDirection = Direction::Up;
 					break;
 
 				case SDLK_LEFT:
+					velocity.setX(-1);
+					velocity.setY(0);
 					currentDirection = Direction::Left;
 					break;
 
 				case SDLK_DOWN:
+					velocity.setX(0);
+					velocity.setY(1);
 					currentDirection = Direction::Down;
 					break;
 
 				case SDLK_RIGHT:
+					velocity.setX(1);
+					velocity.setY(0);
 					currentDirection = Direction::Right;
 					break;
 				}
@@ -127,45 +135,25 @@ int main(int argc, char* argv[]) {
 		currentMoveTime += deltaTime;
 
 		if (currentMoveTime >= moveTime) {
-			switch (currentDirection)
-			{
-			case Up:
-				velocity.setX(0);
-				velocity.setY(-1);
-				break;
-			case Left:
-				velocity.setX(-1);
-				velocity.setY(0);
-				break;
-			case Down:
-				velocity.setX(0);
-				velocity.setY(1);
-				break;
-			case Right:
-				velocity.setX(1);
-				velocity.setY(0);
-				break;
-			}
-
 			snakeBody.pop_back();
 			Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX(), snakeBody[0].getY() + velocity.getY() };
 			snakeBody.push_front(headPosition);
 
-			currentMoveTime = 0;
-		}
+			for (unsigned int i = 0; i < snakeBody.size(); i++) {
+				Vectormath::Vector2 point = snakeBody[i];
 
-		for (unsigned int i = 0; i < snakeBody.size(); i++) {
-			Vectormath::Vector2 point = snakeBody[i];
+				int spriteIndex = currentDirection;
 
-			int spriteIndex = currentDirection;
+				if (i != 0)
+				{
+					spriteIndex = 4;
+				}
 
-			if (i != 0)
-			{
-				spriteIndex = 4;
+				TLN_SetSpritePicture(i, spriteIndex);
+				TLN_SetSpritePosition(i, point.getX() * UNIT_SIZE, point.getY() * UNIT_SIZE);
 			}
 
-			TLN_SetSpritePicture(i, spriteIndex);
-			TLN_SetSpritePosition(i, point.getX() * UNIT_SIZE, point.getY() * UNIT_SIZE);
+			currentMoveTime = 0;
 		}
 
 		// Render
