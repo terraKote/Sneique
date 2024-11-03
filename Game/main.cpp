@@ -35,6 +35,9 @@ int main(int argc, char* argv[]) {
 	Direction currentDirection = Direction::Up;
 	int millisecondsPassed = 0;
 
+	double moveTime = 0.3;
+	double currentMoveTime = 0.0;
+
 	TLN_Spriteset spriteset;
 
 	// Initialize SDL
@@ -122,7 +125,12 @@ int main(int argc, char* argv[]) {
 		millisecondsPassed = SDL_GetTicks();
 		
 		// Game logic
-		x += 80 * deltaTime;
+		currentMoveTime += deltaTime;
+
+		if (currentMoveTime >= moveTime) {
+			x += UNIT_SIZE;
+			currentMoveTime = 0;
+		}
 
 		TLN_SetSpritePosition(0, x, y);
 
