@@ -1,5 +1,7 @@
 #include <iostream>
+#include <stdlib.h>
 #include <deque>
+#include <time.h>
 #include <SDL.h>
 #include <Tilengine.h>
 #include <vectormath.hpp>
@@ -32,7 +34,12 @@ int main(int argc, char* argv[]) {
 	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0 * UNIT_SIZE,0}, Vectormath::Vector2{1 * UNIT_SIZE,0}, Vectormath::Vector2{2 * UNIT_SIZE,0} };
 	Vectormath::Vector2 velocity = { 0, 0 };
 
-	Vectormath::Vector2 fruitPosition = { 5 * UNIT_SIZE, 5 * UNIT_SIZE };
+	int cellCountHorizontal = RENDER_WIDTH / UNIT_SIZE;
+	int cellCountVertical = RENDER_HEIGHT / UNIT_SIZE;
+
+	int seed = std::time(NULL);
+	std::srand(seed);
+	Vectormath::Vector2 fruitPosition = { static_cast<float>(std::rand() % cellCountHorizontal * UNIT_SIZE), static_cast<float>(std::rand() % cellCountVertical * UNIT_SIZE) };
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
@@ -74,7 +81,7 @@ int main(int argc, char* argv[]) {
 	TLN_SetLoadPath("assets/sprites");
 
 	spriteset = TLN_LoadSpriteset("snake");
-	
+
 	// Snake sprites
 	TLN_SetSpriteSet(0, spriteset);
 	TLN_SetSpriteSet(1, spriteset);
