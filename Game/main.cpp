@@ -6,6 +6,9 @@
 #include <Tilengine.h>
 #include <vectormath.hpp>
 
+#include "ObjectManager.h"
+#include "SnakeObject.h"
+
 #define WIDTH 640
 #define HEIGHT 480
 
@@ -75,6 +78,11 @@ int main(int argc, char* argv[]) {
 	// Main loop flag
 	bool quit = false;
 	SDL_Event evt;
+
+	ObjectManager objectManager;
+
+	SnakeObject* snakeObject = objectManager.CreateObject<SnakeObject>();
+	SnakeObject* snakeObject2 = objectManager.CreateObject<SnakeObject>();
 
 	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, 64, 0);
 	TLN_SetLoadPath("assets/sprites");
@@ -172,7 +180,15 @@ int main(int argc, char* argv[]) {
 
 		if (snakeBody[0].getX() == fruitPosition.getX() && snakeBody[0].getY() == fruitPosition.getY())
 		{
+		/*	Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX() * UNIT_SIZE, snakeBody[0].getY() + velocity.getY() * UNIT_SIZE };
+			snakeBody.push_front(headPosition);*/
+
 			fruitPosition = GetRandomPosition();
+		}
+
+		for (auto& element : objectManager.GetCreatedObjects())
+		{
+			element->Update(deltaTime);
 		}
 
 		// Cherry draw logic
@@ -183,6 +199,11 @@ int main(int argc, char* argv[]) {
 
 		// Tilengine Draw Begin
 		TLN_SetRenderTarget(rt_pixels, rt_pitch);
+
+		for (auto& element : objectManager.GetCreatedObjects())
+		{
+			element->Draw(deltaTime);
+		}
 
 		TLN_UpdateFrame(0);
 		// Tilengine Draw End
