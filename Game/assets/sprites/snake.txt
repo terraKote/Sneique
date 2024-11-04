@@ -3,3 +3,4 @@ snakeLeft = 16 24 8 8
 snakeDown = 24 24 8 8
 snakeRight = 32 24 8 8
 snakeBody = 40 24 8 8
+cherry = 48 24 8 8
