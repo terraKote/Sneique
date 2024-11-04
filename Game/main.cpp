@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 	dstrect.w = WIDTH;
 	dstrect.h = HEIGHT;
 
-	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0,0}, Vectormath::Vector2{1,0}, Vectormath::Vector2{2,0} };
+	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0 * UNIT_SIZE,0}, Vectormath::Vector2{1 * UNIT_SIZE,0}, Vectormath::Vector2{2 * UNIT_SIZE,0} };
 	Vectormath::Vector2 velocity = { 0, 0 };
 
 	Vectormath::Vector2 fruitPosition = { 5 * UNIT_SIZE, 5 * UNIT_SIZE };
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 
 		if (currentMoveTime >= moveTime) {
 			snakeBody.pop_back();
-			Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX(), snakeBody[0].getY() + velocity.getY() };
+			Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX() * UNIT_SIZE, snakeBody[0].getY() + velocity.getY() * UNIT_SIZE };
 			snakeBody.push_front(headPosition);
 
 			for (unsigned int i = 0; i < snakeBody.size(); i++) {
@@ -158,7 +158,7 @@ int main(int argc, char* argv[]) {
 				}
 
 				TLN_SetSpritePicture(i, spriteIndex);
-				TLN_SetSpritePosition(i, point.getX() * UNIT_SIZE, point.getY() * UNIT_SIZE);
+				TLN_SetSpritePosition(i, point.getX(), point.getY());
 			}
 
 			currentMoveTime = 0;
