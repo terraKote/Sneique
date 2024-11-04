@@ -17,6 +17,8 @@
 const int FPS = 60;
 const int MILLISECONDS_PER_FRAME = 1000 / FPS;
 
+Vectormath::Vector2 GetRandomPosition();
+
 enum Direction {
 	Up,
 	Left,
@@ -34,12 +36,9 @@ int main(int argc, char* argv[]) {
 	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0 * UNIT_SIZE,0}, Vectormath::Vector2{1 * UNIT_SIZE,0}, Vectormath::Vector2{2 * UNIT_SIZE,0} };
 	Vectormath::Vector2 velocity = { 0, 0 };
 
-	int cellCountHorizontal = RENDER_WIDTH / UNIT_SIZE;
-	int cellCountVertical = RENDER_HEIGHT / UNIT_SIZE;
-
 	int seed = std::time(NULL);
 	std::srand(seed);
-	Vectormath::Vector2 fruitPosition = { static_cast<float>(std::rand() % cellCountHorizontal * UNIT_SIZE), static_cast<float>(std::rand() % cellCountVertical * UNIT_SIZE) };
+	Vectormath::Vector2 fruitPosition = GetRandomPosition();
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
@@ -171,6 +170,11 @@ int main(int argc, char* argv[]) {
 			currentMoveTime = 0;
 		}
 
+		if (snakeBody[0].getX() == fruitPosition.getX() && snakeBody[0].getY() == fruitPosition.getY())
+		{
+			fruitPosition = GetRandomPosition();
+		}
+
 		// Cherry draw logic
 		TLN_SetSpritePosition(3, fruitPosition.getX(), fruitPosition.getY());
 
@@ -201,4 +205,11 @@ int main(int argc, char* argv[]) {
 	SDL_Quit();
 
 	return 0;
+}
+
+Vectormath::Vector2 GetRandomPosition() {
+	int cellCountHorizontal = RENDER_WIDTH / UNIT_SIZE;
+	int cellCountVertical = RENDER_HEIGHT / UNIT_SIZE;
+
+	return { static_cast<float>(std::rand() % cellCountHorizontal * UNIT_SIZE), static_cast<float>(std::rand() % cellCountVertical * UNIT_SIZE) };
 }
