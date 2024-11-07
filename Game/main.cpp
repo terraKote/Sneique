@@ -1,11 +1,11 @@
 #include <iostream>
 #include <stdlib.h>
-#include <deque>
 #include <time.h>
 #include <SDL.h>
 #include <Tilengine.h>
 #include <vectormath.hpp>
 
+#include "Constants.h"
 #include "ObjectManager.h"
 #include "SnakeObject.h"
 
@@ -15,19 +15,11 @@
 #define RENDER_WIDTH 160
 #define RENDER_HEIGHT 120
 
-#define UNIT_SIZE 8
 
 const int FPS = 60;
 const int MILLISECONDS_PER_FRAME = 1000 / FPS;
 
 Vectormath::Vector2 GetRandomPosition();
-
-enum Direction {
-	Up,
-	Left,
-	Down,
-	Right
-};
 
 int main(int argc, char* argv[]) {
 	SDL_Rect dstrect = { 0 };
@@ -36,8 +28,7 @@ int main(int argc, char* argv[]) {
 	dstrect.w = WIDTH;
 	dstrect.h = HEIGHT;
 
-	std::deque<Vectormath::Vector2> snakeBody = { Vectormath::Vector2{0 * UNIT_SIZE,0}, Vectormath::Vector2{1 * UNIT_SIZE,0}, Vectormath::Vector2{2 * UNIT_SIZE,0} };
-	Vectormath::Vector2 velocity = { 0, 0 };
+
 
 	int seed = std::time(NULL);
 	std::srand(seed);
@@ -45,13 +36,8 @@ int main(int argc, char* argv[]) {
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
-	Direction currentDirection = Direction::Up;
+
 	int millisecondsPassed = 0;
-
-	double moveTime = 0.15;
-	double currentMoveTime = 0.0;
-
-	TLN_Spriteset spriteset;
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -82,12 +68,14 @@ int main(int argc, char* argv[]) {
 	ObjectManager objectManager;
 
 	SnakeObject* snakeObject = objectManager.CreateObject<SnakeObject>();
-	SnakeObject* snakeObject2 = objectManager.CreateObject<SnakeObject>();
 
-	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, 64, 0);
-	TLN_SetLoadPath("assets/sprites");
+	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, MAX_SPRITES, 0);
+	//TLN_SetLoadPath("assets/sprites");
 
-	spriteset = TLN_LoadSpriteset("snake");
+	TLN_Spriteset spriteset;
+
+	//spriteset = TLN_LoadSpriteset("snake");
+	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
 	// Snake sprites
 	TLN_SetSpriteSet(0, spriteset);
@@ -108,36 +96,6 @@ int main(int argc, char* argv[]) {
 			case SDL_QUIT:
 				quit = true;
 				break;
-
-			case SDL_KEYDOWN:
-				SDL_KeyboardEvent* keybevt = (SDL_KeyboardEvent*)&evt;
-				switch (keybevt->keysym.sym)
-				{
-				case SDLK_UP:
-					velocity.setX(0);
-					velocity.setY(-1);
-					currentDirection = Direction::Up;
-					break;
-
-				case SDLK_LEFT:
-					velocity.setX(-1);
-					velocity.setY(0);
-					currentDirection = Direction::Left;
-					break;
-
-				case SDLK_DOWN:
-					velocity.setX(0);
-					velocity.setY(1);
-					currentDirection = Direction::Down;
-					break;
-
-				case SDLK_RIGHT:
-					velocity.setX(1);
-					velocity.setY(0);
-					currentDirection = Direction::Right;
-					break;
-				}
-				break;
 			}
 		}
 
@@ -154,37 +112,6 @@ int main(int argc, char* argv[]) {
 		millisecondsPassed = SDL_GetTicks();
 
 		// Game logic
-		currentMoveTime += deltaTime;
-
-		if (currentMoveTime >= moveTime) {
-			snakeBody.pop_back();
-			Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX() * UNIT_SIZE, snakeBody[0].getY() + velocity.getY() * UNIT_SIZE };
-			snakeBody.push_front(headPosition);
-
-			for (unsigned int i = 0; i < snakeBody.size(); i++) {
-				Vectormath::Vector2 point = snakeBody[i];
-
-				int spriteIndex = currentDirection;
-
-				if (i != 0)
-				{
-					spriteIndex = 4;
-				}
-
-				TLN_SetSpritePicture(i, spriteIndex);
-				TLN_SetSpritePosition(i, point.getX(), point.getY());
-			}
-
-			currentMoveTime = 0;
-		}
-
-		if (snakeBody[0].getX() == fruitPosition.getX() && snakeBody[0].getY() == fruitPosition.getY())
-		{
-		/*	Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX() * UNIT_SIZE, snakeBody[0].getY() + velocity.getY() * UNIT_SIZE };
-			snakeBody.push_front(headPosition);*/
-
-			fruitPosition = GetRandomPosition();
-		}
 
 		for (auto& element : objectManager.GetCreatedObjects())
 		{
