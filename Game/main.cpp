@@ -7,6 +7,7 @@
 
 #include "Constants.h"
 #include "ObjectManager.h"
+#include "SpriteManager.h"
 #include "SnakeObject.h"
 
 #define WIDTH 640
@@ -65,10 +66,6 @@ int main(int argc, char* argv[]) {
 	bool quit = false;
 	SDL_Event evt;
 
-	ObjectManager objectManager;
-
-	SnakeObject* snakeObject = objectManager.CreateObject<SnakeObject>();
-
 	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, MAX_SPRITES, 0);
 	//TLN_SetLoadPath("assets/sprites");
 
@@ -77,10 +74,17 @@ int main(int argc, char* argv[]) {
 	//spriteset = TLN_LoadSpriteset("snake");
 	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
+	ObjectManager objectManager;
+	SpriteManager* spriteManager = SpriteManager::GetInstance();
+
+	spriteManager->LoadSpriteset("assets/sprites/snake", "snake");
+
+	SnakeObject* snakeObject = objectManager.CreateObject<SnakeObject>();
+
 	// Snake sprites
-	TLN_SetSpriteSet(0, spriteset);
-	TLN_SetSpriteSet(1, spriteset);
-	TLN_SetSpriteSet(2, spriteset);
+	//TLN_SetSpriteSet(0, spriteset);
+	//TLN_SetSpriteSet(1, spriteset);
+	//TLN_SetSpriteSet(2, spriteset);
 
 	// Cherry sprites
 	TLN_SetSpriteSet(3, spriteset);
