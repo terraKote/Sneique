@@ -68,5 +68,16 @@ void SnakeObject::Update(double deltaTime) {
 }
 
 void SnakeObject::Draw(double deltaTime) {
+	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
+		Vectormath::Vector2 point = _snakeBody[i];
+		int spriteIndex = static_cast<int>(_currentDirection);
 
+		if (i != 0)
+		{
+			spriteIndex = 4;
+		}
+
+		_spriteManager->SetSpriteDataImage(&_sprites[i], spriteIndex);
+		_spriteManager->SetSpritePosition(&_sprites[i], point.getX(), point.getY());
+	}
 }

@@ -1,9 +1,11 @@
 #pragma once
 #include <deque>
+#include <vector>
 #include <vectormath.hpp>
 
 #include "Constants.h"
 #include "ObjectManager.h"
+#include "SpriteManager.h"
 
 enum Direction {
 	Up,
@@ -17,9 +19,11 @@ class SnakeObject : public Object
 private:
 	Direction _currentDirection;
 	std::deque<Vectormath::Vector2> _snakeBody;
+	std::vector<SpriteData> _sprites;
 	Vectormath::Vector2 _velocity;
 	double _moveTime;
 	double _currentMoveTime;
+	SpriteManager* _spriteManager;
 
 public:
 	SnakeObject(int id) : Object(id) {
@@ -28,6 +32,14 @@ public:
 		_velocity = { 0, 0 };
 		_moveTime = 0.15;
 		_currentMoveTime = 0.0;
+		_spriteManager = SpriteManager::GetInstance();
+
+		for (const auto bodyBlock : _snakeBody)
+		{
+			SpriteData sprite = _spriteManager->GetSpriteData();
+			_sprites.push_back(sprite);
+			_spriteManager->SetSpriteset(&sprite, "snake");
+		}
 	}
 
 	void Update(double deltaTime) override;
