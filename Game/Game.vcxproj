@@ -159,14 +159,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Singleton.cpp" />
     <ClCompile Include="SnakeObject.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="SnakeObject.h" />
     <ClInclude Include="SpriteManager.h" />
   </ItemGroup>

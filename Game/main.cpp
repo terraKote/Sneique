@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
 	ObjectManager objectManager;
-	SpriteManager* spriteManager = SpriteManager::GetInstance();
+	SpriteManager* spriteManager = Singleton<SpriteManager>::GetInstance();
 
 	spriteManager->LoadSpriteset("assets/sprites/snake", "snake");
 

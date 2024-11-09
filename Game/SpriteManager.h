@@ -4,12 +4,14 @@
 
 #include <Tilengine.h>
 
+#include "Singleton.h"
+
 struct SpriteData {
 private:
 	unsigned int _index;
 
 public:
-	SpriteData(unsigned int index) : _index(index){}
+	SpriteData(unsigned int index) : _index(index) {}
 
 	unsigned int GetIndex()
 	{
@@ -19,22 +21,15 @@ public:
 
 class SpriteManager
 {
-protected:
-	static SpriteManager* _instance;
-	SpriteManager();
-
+	friend class Singleton<SpriteManager>;
 private:
 	unsigned int _createdSpritesCount;
 	std::unordered_map<std::string, TLN_Spriteset> _loadedSpritesets;
 
-public:
-	SpriteManager(SpriteManager &) = delete;
+	SpriteManager();
 	~SpriteManager();
 
-	void operator=(const SpriteManager &) = delete;
-
-	static SpriteManager* GetInstance();
-
+public:
 	void LoadSpriteset(std::string path, std::string name);
 	SpriteData GetSpriteData();
 	void SetSpriteset(SpriteData* spriteData, std::string spritesetName);
