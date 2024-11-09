@@ -1,9 +1,8 @@
 #include "SpriteManager.h"
 
-SpriteManager* SpriteManager::_instance = nullptr;
-
 SpriteManager::SpriteManager()
 {
+	_createdSpritesCount = 0;
 }
 
 SpriteManager::~SpriteManager()
@@ -14,16 +13,6 @@ SpriteManager::~SpriteManager()
 	}
 
 	_loadedSpritesets.clear();
-}
-
-SpriteManager* SpriteManager::GetInstance()
-{
-	if (_instance == nullptr)
-	{
-		_instance = new SpriteManager();
-	}
-
-	return _instance;
 }
 
 void SpriteManager::LoadSpriteset(std::string path, std::string name)

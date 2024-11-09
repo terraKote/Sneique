@@ -4,6 +4,7 @@
 #include <vectormath.hpp>
 
 #include "Constants.h"
+#include "Singleton.h"
 #include "ObjectManager.h"
 #include "SpriteManager.h"
 
@@ -32,7 +33,7 @@ public:
 		_velocity = { 0, 0 };
 		_moveTime = 0.15;
 		_currentMoveTime = 0.0;
-		_spriteManager = SpriteManager::GetInstance();
+		_spriteManager = Singleton<SpriteManager>::GetInstance();
 
 		for (const auto bodyBlock : _snakeBody)
 		{
