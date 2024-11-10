@@ -23,14 +23,32 @@ void SnakeObject::Update(double deltaTime) {
 		_currentDirection = Direction::Right;
 	}
 
+	bool addSegment = false;
+
+	if (_inputManager->IsButtonPressed(ACTION)) {
+		addSegment = true;
+	}
+
 	_currentMoveTime += deltaTime;
 
 	if (_currentMoveTime < _moveTime)
 		return;
 
-	_snakeBody.pop_back();
-	Vectormath::Vector2 headPosition = { _snakeBody[0].getX() + _velocity.getX() * UNIT_SIZE, _snakeBody[0].getY() + _velocity.getY() * UNIT_SIZE };
-	_snakeBody.push_front(headPosition);
+	if (addSegment)
+	{
+		Vectormath::Vector2 headPosition = { _snakeBody[0].getX() + _velocity.getX() * UNIT_SIZE, _snakeBody[0].getY() + _velocity.getY() * UNIT_SIZE };
+		_snakeBody.push_front(headPosition);
+
+		SpriteData sprite = _spriteManager->GetSpriteData();
+		_spriteManager->SetSpriteset(&sprite, "snake");
+		_sprites.push_back(sprite);
+	}
+	else {
+		_snakeBody.pop_back();
+		Vectormath::Vector2 headPosition = { _snakeBody[0].getX() + _velocity.getX() * UNIT_SIZE, _snakeBody[0].getY() + _velocity.getY() * UNIT_SIZE };
+		_snakeBody.push_front(headPosition);
+	}
+
 	_currentMoveTime = 0;
 
 	//	if (snakeBody[0].getX() == fruitPosition.getX() && snakeBody[0].getY() == fruitPosition.getY())

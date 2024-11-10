@@ -7,6 +7,7 @@
 #define DOWN SDLK_DOWN
 #define LEFT SDLK_LEFT
 #define RIGHT SDLK_RIGHT
+#define ACTION SDLK_z
 
 class InputManager
 {
