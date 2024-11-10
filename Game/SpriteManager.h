@@ -11,6 +11,7 @@ private:
 	unsigned int _index;
 
 public:
+	SpriteData() = default;
 	SpriteData(unsigned int index) : _index(index) {}
 
 	unsigned int GetIndex()
