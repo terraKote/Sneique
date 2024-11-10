@@ -83,14 +83,13 @@ int main(int argc, char* argv[]) {
 
 	SnakeObject* snakeObject = objectManager.CreateObject<SnakeObject>();
 
-	// Snake sprites
-	//TLN_SetSpriteSet(0, spriteset);
-	//TLN_SetSpriteSet(1, spriteset);
-	//TLN_SetSpriteSet(2, spriteset);
-
 	// Cherry sprites
-	TLN_SetSpriteSet(3, spriteset);
-	TLN_SetSpritePicture(3, 5);
+	SpriteData cherry = spriteManager->GetSpriteData();
+	spriteManager->SetSpriteset(&cherry, "snake");
+	//TLN_SetSpriteSet(3, spriteset);
+	
+	spriteManager->SetSpriteDataImage(&cherry, 5);
+	//TLN_SetSpritePicture(3, 5);
 
 	TLN_SetBGColor(0, 0, 0);
 
@@ -137,7 +136,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// Cherry draw logic
-		TLN_SetSpritePosition(3, fruitPosition.getX(), fruitPosition.getY());
+		TLN_SetSpritePosition(cherry.GetIndex(), fruitPosition.getX(), fruitPosition.getY());
 
 		// Render
 		SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);
