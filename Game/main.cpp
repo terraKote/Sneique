@@ -9,6 +9,7 @@
 #include "ObjectManager.h"
 #include "SpriteManager.h"
 #include "SnakeObject.h"
+#include "InputManager.h"
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -76,6 +77,7 @@ int main(int argc, char* argv[]) {
 
 	ObjectManager objectManager;
 	SpriteManager* spriteManager = Singleton<SpriteManager>::GetInstance();
+	InputManager* inputManager = Singleton<InputManager>::GetInstance();
 
 	spriteManager->LoadSpriteset("assets/sprites/snake", "snake");
 
@@ -95,10 +97,22 @@ int main(int argc, char* argv[]) {
 	// Main application loop
 	while (!quit) {
 		// Event processing
+		SDL_KeyboardEvent* keybevt;
+
 		while (SDL_PollEvent(&evt) != 0) {
 			switch (evt.type) {
 			case SDL_QUIT:
 				quit = true;
+				break;
+
+			case SDL_KEYDOWN:
+				keybevt = (SDL_KeyboardEvent*)&evt;
+				inputManager->SetButtonState(keybevt->keysym.sym, 1);
+				break;
+
+			case SDL_KEYUP:
+				keybevt = (SDL_KeyboardEvent*)&evt;
+				inputManager->SetButtonState(keybevt->keysym.sym, 0);
 				break;
 			}
 		}
