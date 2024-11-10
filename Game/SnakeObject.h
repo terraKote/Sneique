@@ -7,6 +7,7 @@
 #include "Singleton.h"
 #include "ObjectManager.h"
 #include "SpriteManager.h"
+#include "InputManager.h"
 
 enum Direction {
 	Up,
@@ -25,6 +26,7 @@ private:
 	double _moveTime;
 	double _currentMoveTime;
 	SpriteManager* _spriteManager;
+	InputManager* _inputManager;
 
 public:
 	SnakeObject(int id) : Object(id) {
@@ -34,6 +36,7 @@ public:
 		_moveTime = 0.15;
 		_currentMoveTime = 0.0;
 		_spriteManager = Singleton<SpriteManager>::GetInstance();
+		_inputManager = Singleton<InputManager>::GetInstance();
 
 		for (const auto bodyBlock : _snakeBody)
 		{

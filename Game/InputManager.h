@@ -1,6 +1,12 @@
 #pragma once
 #include <cstdint>
+#include <SDL.h>
 #include "Singleton.h"
+
+#define UP SDLK_UP
+#define DOWN SDLK_DOWN
+#define LEFT SDLK_LEFT
+#define RIGHT SDLK_RIGHT
 
 class InputManager
 {
