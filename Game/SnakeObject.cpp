@@ -25,8 +25,11 @@ void SnakeObject::Update(double deltaTime) {
 
 	bool addSegment = false;
 
-	if (_inputManager->IsButtonPressed(ACTION)) {
+	if (_snakeBody[0].getX() == _foodObject->GetPosition().getX() && _snakeBody[0].getY() == _foodObject->GetPosition().getY())
+	{
 		addSegment = true;
+
+		//fruitPosition = GetRandomPosition();
 	}
 
 	_currentMoveTime += deltaTime;
@@ -42,6 +45,8 @@ void SnakeObject::Update(double deltaTime) {
 		SpriteData sprite = _spriteManager->GetSpriteData();
 		_spriteManager->SetSpriteset(&sprite, "snake");
 		_sprites.push_back(sprite);
+
+		_foodObject->MoveRandomly();
 	}
 	else {
 		_snakeBody.pop_back();
@@ -50,14 +55,6 @@ void SnakeObject::Update(double deltaTime) {
 	}
 
 	_currentMoveTime = 0;
-
-	//	if (snakeBody[0].getX() == fruitPosition.getX() && snakeBody[0].getY() == fruitPosition.getY())
-	//	{
-	//		/*	Vectormath::Vector2 headPosition = { snakeBody[0].getX() + velocity.getX() * UNIT_SIZE, snakeBody[0].getY() + velocity.getY() * UNIT_SIZE };
-	//			snakeBody.push_front(headPosition);*/
-
-	//		fruitPosition = GetRandomPosition();
-	//	}
 }
 
 void SnakeObject::Draw(double deltaTime) {

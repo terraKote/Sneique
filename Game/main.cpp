@@ -10,12 +10,10 @@
 #include "SpriteManager.h"
 #include "SnakeObject.h"
 #include "InputManager.h"
+#include "FoodObject.h"
 
 #define WIDTH 640
 #define HEIGHT 480
-
-#define RENDER_WIDTH 160
-#define RENDER_HEIGHT 120
 
 
 const int FPS = 60;
@@ -32,9 +30,9 @@ int main(int argc, char* argv[]) {
 
 
 
-	int seed = std::time(NULL);
-	std::srand(seed);
-	Vectormath::Vector2 fruitPosition = GetRandomPosition();
+	//int seed = std::time(NULL);
+	//std::srand(seed);
+	//Vectormath::Vector2 fruitPosition = GetRandomPosition();
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
@@ -75,21 +73,14 @@ int main(int argc, char* argv[]) {
 	//spriteset = TLN_LoadSpriteset("snake");
 	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
-	ObjectManager objectManager;
+	ObjectManager* objectManager = Singleton<ObjectManager>::GetInstance();
 	SpriteManager* spriteManager = Singleton<SpriteManager>::GetInstance();
 	InputManager* inputManager = Singleton<InputManager>::GetInstance();
 
 	spriteManager->LoadSpriteset("assets/sprites/snake", "snake");
 
-	SnakeObject* snakeObject = objectManager.CreateObject<SnakeObject>();
-
-	// Cherry sprites
-	SpriteData cherry = spriteManager->GetSpriteData();
-	spriteManager->SetSpriteset(&cherry, "snake");
-	//TLN_SetSpriteSet(3, spriteset);
-	
-	spriteManager->SetSpriteDataImage(&cherry, 5);
-	//TLN_SetSpritePicture(3, 5);
+	FoodObject* foodObject = objectManager->CreateObject<FoodObject>("food");
+	SnakeObject* snakeObject = objectManager->CreateObject<SnakeObject>("snake");
 
 	TLN_SetBGColor(0, 0, 0);
 
@@ -130,13 +121,13 @@ int main(int argc, char* argv[]) {
 
 		// Game logic
 
-		for (auto& element : objectManager.GetCreatedObjects())
+		for (auto& element : objectManager->GetCreatedObjects())
 		{
 			element->Update(deltaTime);
 		}
 
 		// Cherry draw logic
-		TLN_SetSpritePosition(cherry.GetIndex(), fruitPosition.getX(), fruitPosition.getY());
+	/*	TLN_SetSpritePosition(cherry.GetIndex(), fruitPosition.getX(), fruitPosition.getY());*/
 
 		// Render
 		SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);
@@ -144,7 +135,7 @@ int main(int argc, char* argv[]) {
 		// Tilengine Draw Begin
 		TLN_SetRenderTarget(rt_pixels, rt_pitch);
 
-		for (auto& element : objectManager.GetCreatedObjects())
+		for (auto& element : objectManager->GetCreatedObjects())
 		{
 			element->Draw(deltaTime);
 		}
