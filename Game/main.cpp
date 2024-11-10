@@ -97,12 +97,12 @@ int main(int argc, char* argv[]) {
 
 			case SDL_KEYDOWN:
 				keybevt = (SDL_KeyboardEvent*)&evt;
-				inputManager->SetButtonState(keybevt->keysym.sym, 1);
+				inputManager->SetButtonState(static_cast<uint32_t>(keybevt->keysym.sym), true);
 				break;
 
 			case SDL_KEYUP:
 				keybevt = (SDL_KeyboardEvent*)&evt;
-				inputManager->SetButtonState(keybevt->keysym.sym, 0);
+				inputManager->SetButtonState(static_cast<uint32_t>(keybevt->keysym.sym), false);
 				break;
 			}
 		}

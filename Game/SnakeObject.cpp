@@ -2,22 +2,22 @@
 #include "SnakeObject.h"
 
 void SnakeObject::Update(double deltaTime) {
-	if (_inputManager->IsButtonPressed(UP)) {
+	if (_inputManager->IsButtonPressed(SNAKE_KEY_UP)) {
 		_velocity.setX(0);
 		_velocity.setY(-1);
 		_currentDirection = Direction::Up;
 	}
-	else if (_inputManager->IsButtonPressed(DOWN)) {
+	else if (_inputManager->IsButtonPressed(SNAKE_KEY_DOWN)) {
 		_velocity.setX(0);
 		_velocity.setY(1);
 		_currentDirection = Direction::Down;
 	}
-	else if (_inputManager->IsButtonPressed(LEFT)) {
+	else if (_inputManager->IsButtonPressed(SNAKE_KEY_LEFT)) {
 		_velocity.setX(-1);
 		_velocity.setY(0);
 		_currentDirection = Direction::Left;
 	}
-	else if (_inputManager->IsButtonPressed(RIGHT)) {
+	else if (_inputManager->IsButtonPressed(SNAKE_KEY_RIGHT)) {
 		_velocity.setX(1);
 		_velocity.setY(0);
 		_currentDirection = Direction::Right;
