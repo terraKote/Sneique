@@ -3,11 +3,11 @@
 #include <SDL.h>
 #include "Singleton.h"
 
-#define UP SDLK_UP
-#define DOWN SDLK_DOWN
-#define LEFT SDLK_LEFT
-#define RIGHT SDLK_RIGHT
-#define ACTION SDLK_z
+#define SNAKE_KEY_UP SDLK_UP
+#define SNAKE_KEY_DOWN SDLK_DOWN
+#define SNAKE_KEY_LEFT SDLK_LEFT
+#define SNAKE_KEY_RIGHT SDLK_RIGHT
+#define SNAKE_KEY_ACTION SDLK_z
 
 class InputManager
 {
@@ -15,7 +15,10 @@ class InputManager
 private:
 	uint32_t _inputState;
 
-	InputManager() = default;
+	InputManager()
+	{
+		_inputState = { 0 };
+	}
 	~InputManager() = default;
 
 public:
