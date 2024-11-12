@@ -24,22 +24,36 @@ void SnakeObject::Update(double deltaTime) {
 	}
 
 	bool addSegment = false;
-
-	if (_snakeBody[0].getX() == _foodObject->GetPosition().getX() && _snakeBody[0].getY() == _foodObject->GetPosition().getY())
-	{
-		addSegment = true;
-
-		//fruitPosition = GetRandomPosition();
-	}
+	Vectormath::Vector2 head = _snakeBody[0];
 
 	_currentMoveTime += deltaTime;
 
 	if (_currentMoveTime < _moveTime)
 		return;
 
+	// Check for collision with the food
+	if (head.getX() == _foodObject->GetPosition().getX() && head.getY() == _foodObject->GetPosition().getY())
+	{
+		addSegment = true;
+	}
+
+	// Check for collision with itself
+	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
+		// Skip the head
+		if (i == 0)
+			continue;
+
+		Vectormath::Vector2 bodySegment = _snakeBody[i];
+
+		if (head.getX() == bodySegment.getX() && head.getY() == bodySegment.getY()) {
+			printf("Game over\n");
+			return;
+		}
+	}
+
 	if (addSegment)
 	{
-		Vectormath::Vector2 headPosition = { _snakeBody[0].getX() + _velocity.getX() * UNIT_SIZE, _snakeBody[0].getY() + _velocity.getY() * UNIT_SIZE };
+		Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE,head.getY() + _velocity.getY() * UNIT_SIZE };
 		_snakeBody.push_front(headPosition);
 
 		SpriteData sprite = _spriteManager->GetSpriteData();
@@ -50,7 +64,7 @@ void SnakeObject::Update(double deltaTime) {
 	}
 	else {
 		_snakeBody.pop_back();
-		Vectormath::Vector2 headPosition = { _snakeBody[0].getX() + _velocity.getX() * UNIT_SIZE, _snakeBody[0].getY() + _velocity.getY() * UNIT_SIZE };
+		Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE, head.getY() + _velocity.getY() * UNIT_SIZE };
 		_snakeBody.push_front(headPosition);
 	}
 
