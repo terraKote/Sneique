@@ -51,11 +51,11 @@ void SnakeObject::Update(double deltaTime) {
 		}
 	}
 
-	if (addSegment)
-	{
-		Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE,head.getY() + _velocity.getY() * UNIT_SIZE };
-		_snakeBody.push_front(headPosition);
+	// Handle the snake movement
+	Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE,head.getY() + _velocity.getY() * UNIT_SIZE };
+	_snakeBody.push_front(headPosition);
 
+	if (addSegment) {
 		SpriteData sprite = _spriteManager->GetSpriteData();
 		_spriteManager->SetSpriteset(&sprite, "snake");
 		_sprites.push_back(sprite);
@@ -64,8 +64,6 @@ void SnakeObject::Update(double deltaTime) {
 	}
 	else {
 		_snakeBody.pop_back();
-		Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE, head.getY() + _velocity.getY() * UNIT_SIZE };
-		_snakeBody.push_front(headPosition);
 	}
 
 	_currentMoveTime = 0;
