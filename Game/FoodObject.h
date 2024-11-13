@@ -9,7 +9,7 @@ class FoodObject : public Object
 {
 private:
 	SpriteManager* _spriteManager;
-	SpriteData _spriteData;
+	SpriteData* _spriteData;
 	Vectormath::Vector2 _position;
 
 public:
@@ -19,8 +19,8 @@ public:
 		_spriteData = _spriteManager->GetSpriteData();
 		_position = { 6 * UNIT_SIZE, 6 * UNIT_SIZE };
 
-		_spriteManager->SetSpriteset(&_spriteData, "snake");
-		_spriteManager->SetSpriteDataImage(&_spriteData, 5);
+		_spriteData->SetSpriteSet("snake");
+		_spriteData->SetSpriteIndex(5);
 	}
 
 	const Vectormath::Vector2 GetPosition();

@@ -2,7 +2,10 @@
 
 SpriteManager::SpriteManager()
 {
-	_createdSpritesCount = 0;
+	for (unsigned int i = 0; i < MAX_SPRITES; i++) {
+		SpriteData spriteData(i);
+		_createdSprites[i] = spriteData;
+	}
 }
 
 SpriteManager::~SpriteManager()
@@ -21,25 +24,40 @@ void SpriteManager::LoadSpriteset(std::string path, std::string name)
 	_loadedSpritesets[name] = spriteset;
 }
 
-SpriteData SpriteManager::GetSpriteData()
+SpriteData* SpriteManager::GetSpriteData()
 {
-	SpriteData spriteData(_createdSpritesCount);
-	_createdSpritesCount++;
-	return spriteData;
+	//
+	TLN_GetAvailableSprite();
+
+	for (unsigned int i = 0; i < MAX_SPRITES; i++) {
+		if (!_createdSprites[i].IsReleased())
+			continue;
+
+		_createdSprites[i].Grab();
+		return &_createdSprites[i];
+	}
 }
 
-void SpriteManager::SetSpriteset(SpriteData* spriteData, std::string spritesetName)
+void SpriteManager::UpdateSprites()
 {
-	TLN_Spriteset spriteSet = _loadedSpritesets[spritesetName];
-	TLN_SetSpriteSet(spriteData->GetIndex(), spriteSet);
-}
+	for (unsigned int i = 0; i < MAX_SPRITES; i++) {
+		SpriteData spriteData = _createdSprites[i];
 
-void SpriteManager::SetSpritePosition(SpriteData* spriteData, int x, int y)
-{
-	TLN_SetSpritePosition(spriteData->GetIndex(), x, y);
-}
+		if (spriteData.IsReleased())
+		{
+			TLN_DisableSprite(spriteData.GetIndex());
+			continue;
+		}
 
-void SpriteManager::SetSpriteDataImage(SpriteData* spriteData, unsigned int imageIndex)
-{
-	TLN_SetSpritePicture(spriteData->GetIndex(), imageIndex);
+		// Set spriteset
+		TLN_Spriteset spriteSet = _loadedSpritesets[spriteData.GetSpriteset()];
+		TLN_SetSpriteSet(spriteData.GetIndex(), spriteSet);
+
+		// Set sprite position
+		Vectormath::Vector2 position = spriteData.GetPosition();
+		TLN_SetSpritePosition(spriteData.GetIndex(), position.getX(), position.getY());
+
+		// Set sprite index
+		TLN_SetSpritePicture(spriteData.GetIndex(), spriteData.GetSpriteIndex());
+	}
 }

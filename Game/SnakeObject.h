@@ -23,7 +23,7 @@ class SnakeObject : public Object
 private:
 	Direction _currentDirection;
 	std::deque<Vectormath::Vector2> _snakeBody;
-	std::vector<SpriteData> _sprites;
+	std::vector<SpriteData*> _sprites;
 	Vectormath::Vector2 _velocity;
 	double _moveTime;
 	double _currentMoveTime;
@@ -45,9 +45,9 @@ public:
 
 		for (const auto bodyBlock : _snakeBody)
 		{
-			SpriteData sprite = _spriteManager->GetSpriteData();
+			SpriteData* sprite = _spriteManager->GetSpriteData();
 			_sprites.push_back(sprite);
-			_spriteManager->SetSpriteset(&sprite, "snake");
+			sprite->SetSpriteSet("snake");
 		}
 
 		_foodObject = static_cast<FoodObject*>(_objectManager->FindObject("food"));
@@ -55,5 +55,6 @@ public:
 
 	void Update(double deltaTime) override;
 	void Draw(double deltaTime) override;
+	void Reset();
 };
 
