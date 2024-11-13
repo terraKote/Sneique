@@ -126,8 +126,7 @@ int main(int argc, char* argv[]) {
 			element->Update(deltaTime);
 		}
 
-		// Cherry draw logic
-	/*	TLN_SetSpritePosition(cherry.GetIndex(), fruitPosition.getX(), fruitPosition.getY());*/
+		spriteManager->UpdateSprites();
 
 		// Render
 		SDL_LockTexture(backbuffer, NULL, (void**)&rt_pixels, &rt_pitch);

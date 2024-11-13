@@ -216,7 +216,7 @@ bool TLN_SetSpritePicture (int nsprite, int entry)
 	sprite->info = &sprite->spriteset->data[entry];
 	sprite->pixels = sprite->spriteset->bitmap->data + sprite->info->offset;
 	UpdateSprite (sprite);
-	debugmsg("SetSpritePicture %d -> %d\n", nsprite, entry);
+	//debugmsg("SetSpritePicture %d -> %d\n", nsprite, entry);
 
 	TLN_SetLastError (TLN_ERR_OK);
 	return true;

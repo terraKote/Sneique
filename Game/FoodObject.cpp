@@ -19,5 +19,5 @@ void FoodObject::Update(double deltaTime)
 
 void FoodObject::Draw(double detltaTime)
 {
-	_spriteManager->SetSpritePosition(&_spriteData, _position.getX(), _position.getY());
+	_spriteData->SetPosition(_position);
 }
