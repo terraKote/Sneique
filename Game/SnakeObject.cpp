@@ -52,27 +52,24 @@ void SnakeObject::Update(double deltaTime) {
 	}
 
 	// Handle the snake movement
-	if (Vectormath::length(_velocity) == 0.0f)
-		return;
+	if (Vectormath::length(_velocity) > 0.0f)
+	{
+		Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE, head.getY() + _velocity.getY() * UNIT_SIZE };
+		_snakeBody.push_front(headPosition);
 
-	Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE, head.getY() + _velocity.getY() * UNIT_SIZE };
-	_snakeBody.push_front(headPosition);
+		if (addSegment) {
+			SpriteData* sprite = _spriteManager->GetSpriteData();
+			_sprites.push_back(sprite);
+			sprite->SetSpriteSet("snake");
 
-	if (addSegment) {
-		SpriteData* sprite = _spriteManager->GetSpriteData();
-		_sprites.push_back(sprite);
-		sprite->SetSpriteSet("snake");
-
-		_foodObject->MoveRandomly();
+			_foodObject->MoveRandomly();
+		}
+		else {
+			_snakeBody.pop_back();
+		}
 	}
-	else {
-		_snakeBody.pop_back();
-	}
 
-	_currentMoveTime = 0;
-}
-
-void SnakeObject::Draw(double deltaTime) {
+	// Draw the snake
 	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
 		Vectormath::Vector2 point = _snakeBody[i];
 		unsigned int spriteIndex = static_cast<unsigned int>(_currentDirection);
@@ -85,6 +82,8 @@ void SnakeObject::Draw(double deltaTime) {
 		_sprites[i]->SetSpriteIndex(spriteIndex);
 		_sprites[i]->SetPosition(point);
 	}
+
+	_currentMoveTime = 0;
 }
 
 void SnakeObject::Reset() {

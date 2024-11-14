@@ -21,12 +21,10 @@ public:
 
 		_spriteData->SetSpriteSet("snake");
 		_spriteData->SetSpriteIndex(5);
+		_spriteData->SetPosition(_position);
 	}
 
 	const Vectormath::Vector2 GetPosition();
 	void MoveRandomly();
-
-	void Update(double deltaTime) override;
-	void Draw(double detltaTime) override;
 };
 
