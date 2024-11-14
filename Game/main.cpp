@@ -126,6 +126,11 @@ int main(int argc, char* argv[]) {
 			element->Update(deltaTime);
 		}
 
+		for (auto& element : objectManager->GetCreatedObjects())
+		{
+			element->Draw(deltaTime);
+		}
+
 		spriteManager->UpdateSprites();
 
 		// Render
@@ -133,11 +138,6 @@ int main(int argc, char* argv[]) {
 
 		// Tilengine Draw Begin
 		TLN_SetRenderTarget(rt_pixels, rt_pitch);
-
-		for (auto& element : objectManager->GetCreatedObjects())
-		{
-			element->Draw(deltaTime);
-		}
 
 		TLN_UpdateFrame(0);
 		// Tilengine Draw End
