@@ -126,11 +126,6 @@ int main(int argc, char* argv[]) {
 			element->Update(deltaTime);
 		}
 
-		for (auto& element : objectManager->GetCreatedObjects())
-		{
-			element->Draw(deltaTime);
-		}
-
 		spriteManager->UpdateSprites();
 
 		// Render

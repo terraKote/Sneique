@@ -23,7 +23,6 @@ public:
 	const std::string GetName();
 
 	virtual void Update(double deltaTime);
-	virtual void Draw(double deltaTime);
 };
 
 class ObjectManager

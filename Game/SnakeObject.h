@@ -54,7 +54,6 @@ public:
 	}
 
 	void Update(double deltaTime) override;
-	void Draw(double deltaTime) override;
 	void Reset();
 };
 

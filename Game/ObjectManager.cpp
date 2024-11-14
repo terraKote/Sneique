@@ -12,9 +12,6 @@ const std::string Object::GetName()
 void Object::Update(double deltaTime) {
 }
 
-void Object::Draw(double deltaTime) {
-}
-
 std::vector<Object*> ObjectManager::GetCreatedObjects() {
 	return _createdObjects;
 }

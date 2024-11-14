@@ -11,13 +11,6 @@ void FoodObject::MoveRandomly()
 	int cellCountVertical = RENDER_HEIGHT / UNIT_SIZE;
 
 	_position = { static_cast<float>(std::rand() % cellCountHorizontal * UNIT_SIZE), static_cast<float>(std::rand() % cellCountVertical * UNIT_SIZE) };
-}
 
-void FoodObject::Update(double deltaTime)
-{
-}
-
-void FoodObject::Draw(double detltaTime)
-{
 	_spriteData->SetPosition(_position);
 }
