@@ -36,7 +36,7 @@ public:
 	SnakeObject(int id, std::string name) : Object(id, name) {
 		_currentDirection = Direction::Left;
 		_snakeBody = { Vectormath::Vector2{4 * UNIT_SIZE,0}, Vectormath::Vector2{5 * UNIT_SIZE,0}, Vectormath::Vector2{6 * UNIT_SIZE,0} };
-		_velocity = { -1, 0 };
+		_velocity = { 0, 0 };
 		_moveTime = 0.15;
 		_currentMoveTime = 0.0;
 		_spriteManager = Singleton<SpriteManager>::GetInstance();
