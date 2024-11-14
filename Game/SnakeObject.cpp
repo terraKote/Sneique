@@ -52,7 +52,10 @@ void SnakeObject::Update(double deltaTime) {
 	}
 
 	// Handle the snake movement
-	Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE,head.getY() + _velocity.getY() * UNIT_SIZE };
+	if (Vectormath::length(_velocity) == 0.0f)
+		return;
+
+	Vectormath::Vector2 headPosition = { head.getX() + _velocity.getX() * UNIT_SIZE, head.getY() + _velocity.getY() * UNIT_SIZE };
 	_snakeBody.push_front(headPosition);
 
 	if (addSegment) {
