@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Create a window
-	SDL_Window* window = SDL_CreateWindow("Snake Game",
+	SDL_Window* window = SDL_CreateWindow("Sneique",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		WIDTH, HEIGHT,
