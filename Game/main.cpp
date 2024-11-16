@@ -11,6 +11,7 @@
 #include "SnakeObject.h"
 #include "InputManager.h"
 #include "FoodObject.h"
+#include "GridManager.h"
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -79,6 +80,7 @@ int main(int argc, char* argv[]) {
 
 	spriteManager->LoadSpriteset("assets/sprites/snake", "snake");
 
+	GridManager* gridManager = objectManager->CreateObject<GridManager>("gridManager");
 	FoodObject* foodObject = objectManager->CreateObject<FoodObject>("food");
 	SnakeObject* snakeObject = objectManager->CreateObject<SnakeObject>("snake");
 
