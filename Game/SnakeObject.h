@@ -10,6 +10,7 @@
 #include "SpriteManager.h"
 #include "InputManager.h"
 #include "FoodObject.h"
+#include "GridManager.h"
 
 enum Direction {
 	Up,
@@ -31,6 +32,7 @@ private:
 	InputManager* _inputManager;
 	ObjectManager* _objectManager;
 	FoodObject* _foodObject;
+	GridManager* _gridManager;
 
 public:
 	SnakeObject(int id, std::string name) : Object(id, name) {
@@ -51,6 +53,7 @@ public:
 		}
 
 		_foodObject = static_cast<FoodObject*>(_objectManager->FindObject("food"));
+		_gridManager = static_cast<GridManager*>(_objectManager->FindObject("gridManager"));
 	}
 
 	void Update(double deltaTime) override;

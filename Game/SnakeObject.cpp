@@ -51,6 +51,13 @@ void SnakeObject::Update(double deltaTime) {
 		}
 	}
 
+	// Set cells free
+	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
+		Vectormath::Vector2 segment = _snakeBody[i];
+		unsigned int cellIndex = (segment.getX() / UNIT_SIZE) * (segment.getY() / UNIT_SIZE);
+		_gridManager->SetCellState(cellIndex, true);
+	}
+
 	// Handle the snake movement
 	if (Vectormath::length(_velocity) > 0.0f)
 	{
@@ -61,12 +68,22 @@ void SnakeObject::Update(double deltaTime) {
 			SpriteData* sprite = _spriteManager->GetSpriteData();
 			_sprites.push_back(sprite);
 			sprite->SetSpriteSet("snake");
-
-			_foodObject->MoveRandomly();
 		}
 		else {
 			_snakeBody.pop_back();
 		}
+	}
+
+	// Set cells taken
+	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
+		Vectormath::Vector2 segment = _snakeBody[i];
+		unsigned int cellIndex = (segment.getX() / UNIT_SIZE) * (segment.getY() / UNIT_SIZE);
+		_gridManager->SetCellState(cellIndex, false);
+	}
+
+	// Move the food
+	if (addSegment) {
+		_foodObject->MoveRandomly();
 	}
 
 	// Draw the snake
