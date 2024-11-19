@@ -118,11 +118,9 @@ int main(int argc, char* argv[]) {
 		}
 
 		double deltaTime = (SDL_GetTicks() - millisecondsPassed) / 1000.0;
-
 		millisecondsPassed = SDL_GetTicks();
 
 		// Game logic
-
 		for (auto& element : objectManager->GetCreatedObjects())
 		{
 			element->Update(deltaTime);
