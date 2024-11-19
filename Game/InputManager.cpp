@@ -1,22 +1,29 @@
 #include "InputManager.h"
 
-void InputManager::SetButtonState(uint32_t button, uint8_t state)
+void InputManager::SetBufferState(uint32_t* buffer, uint32_t button, bool state)
 {
-	switch (state)
-	{
-	default:
-	case 0:
-		_inputState &= ~(1 << button);
-		break;
-
-	case 1:
-		_inputState |= (1 << button);
-		break;
+	if (state) {
+		*buffer |= (1 << button);
+		return;
 	}
+
+	*buffer &= ~(1 << button);
+}
+
+void InputManager::SetButtonState(uint32_t button, bool state)
+{
+	SetBufferState(&_inputState, button, state);
 }
 
 bool InputManager::IsButtonPressed(uint32_t button)
 {
-	int state = _inputState & 1 << button;
-	return state != 0;
+	bool currentState = _inputState & 1 << button;
+	bool previousState = _previousInputState & 1 << button;
+
+	if (currentState != previousState)
+	{
+		SetBufferState(&_previousInputState, button, !previousState);
+	}
+
+	return currentState && currentState != previousState;
 }
