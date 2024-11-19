@@ -2,31 +2,35 @@
 #include "SnakeObject.h"
 
 void SnakeObject::Update(double deltaTime) {
+	_currentMoveTime += deltaTime;
+
 	if (_inputManager->IsButtonPressed(SNAKE_KEY_UP) && _currentDirection != Direction::Down) {
 		_velocity.setX(0);
 		_velocity.setY(-1);
 		_currentDirection = Direction::Up;
+		_currentMoveTime = _moveTime;
 	}
 	else if (_inputManager->IsButtonPressed(SNAKE_KEY_DOWN) && _currentDirection != Direction::Up) {
 		_velocity.setX(0);
 		_velocity.setY(1);
 		_currentDirection = Direction::Down;
+		_currentMoveTime = _moveTime;
 	}
 	else if (_inputManager->IsButtonPressed(SNAKE_KEY_LEFT) && _currentDirection != Direction::Right) {
 		_velocity.setX(-1);
 		_velocity.setY(0);
 		_currentDirection = Direction::Left;
+		_currentMoveTime = _moveTime;
 	}
 	else if (_inputManager->IsButtonPressed(SNAKE_KEY_RIGHT) && _currentDirection != Direction::Left) {
 		_velocity.setX(1);
 		_velocity.setY(0);
 		_currentDirection = Direction::Right;
+		_currentMoveTime = _moveTime;
 	}
 
 	bool addSegment = false;
 	Vectormath::Vector2 head = _snakeBody[0];
-
-	_currentMoveTime += deltaTime;
 
 	if (_currentMoveTime < _moveTime)
 		return;

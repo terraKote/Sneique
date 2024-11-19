@@ -14,15 +14,19 @@ class InputManager
 	friend class Singleton<InputManager>;
 private:
 	uint32_t _inputState;
+	uint32_t _previousInputState;
 
 	InputManager()
 	{
 		_inputState = { 0 };
+		_previousInputState = { 0 };
 	}
 	~InputManager() = default;
 
+	void SetBufferState(uint32_t* buffer, uint32_t button, bool state);
+
 public:
-	void SetButtonState(uint32_t button, uint8_t state);
+	void SetButtonState(uint32_t button, bool state);
 	bool IsButtonPressed(uint32_t button);
 };
 
