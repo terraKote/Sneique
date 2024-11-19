@@ -2,6 +2,10 @@
 
 void GridManager::SetCellState(unsigned int index, bool isFree)
 {
+	// Prevent setting the cells that are out of the screen bounds
+	if (index > _grid.size() || index < 0)
+		return;
+
 	if (isFree) {
 		_grid.reset(index);
 		return;
