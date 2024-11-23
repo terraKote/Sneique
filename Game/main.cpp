@@ -13,24 +13,15 @@
 #include "FoodObject.h"
 #include "GridManager.h"
 
-#define WIDTH 640
-#define HEIGHT 480
-
 const int FPS = 60;
 const int MILLISECONDS_PER_FRAME = 1000 / FPS;
 
 Vectormath::Vector2 GetRandomPosition();
 
 int main(int argc, char* argv[]) {
-	SDL_Rect dstrect = { 0 };
-	dstrect.x = 0;
-	dstrect.y = 0;
-	dstrect.w = WIDTH;
-	dstrect.h = HEIGHT;
-
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
-
+	bool quit = false;
 	int millisecondsPassed = 0;
 
 	// Initialize SDL
@@ -39,12 +30,27 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
+	// Detect the suitable screen resolution
+	SDL_DisplayMode displayMode = { 0 };
+
+	if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0)
+	{
+		SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+		return 1;
+	}
+
+	SDL_Rect dstrect = { 0 };
+	dstrect.x = 0;
+	dstrect.y = 0;
+	dstrect.w = displayMode.w;
+	dstrect.h = displayMode.h;
+
 	// Create a window
 	SDL_Window* window = SDL_CreateWindow("Sneique",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		WIDTH, HEIGHT,
-		SDL_WINDOW_SHOWN);
+		displayMode.w, displayMode.h,
+		SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
 
 	if (window == nullptr) {
 		std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
@@ -54,10 +60,6 @@ int main(int argc, char* argv[]) {
 
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED + SDL_RENDERER_PRESENTVSYNC);
 	SDL_Texture* backbuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, RENDER_WIDTH, RENDER_HEIGHT);
-
-	// Main loop flag
-	bool quit = false;
-	SDL_Event evt;
 
 	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, MAX_SPRITES, 0);
 
@@ -73,11 +75,12 @@ int main(int argc, char* argv[]) {
 	FoodObject* foodObject = objectManager->CreateObject<FoodObject>("food");
 	SnakeObject* snakeObject = objectManager->CreateObject<SnakeObject>("snake");
 
-	TLN_SetBGColor(0, 0, 0);
+	TLN_SetBGColor(255, 255, 255);
 
 	// Main application loop
 	while (!quit) {
 		// Event processing
+		SDL_Event evt;
 		SDL_KeyboardEvent* keybevt;
 
 		while (SDL_PollEvent(&evt) != 0) {
