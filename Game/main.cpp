@@ -74,6 +74,27 @@ int main(int argc, char* argv[]) {
 	//spriteset = TLN_LoadSpriteset("snake");
 	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
+	// TLN_Tilemap tilemap = TLN_LoadTilemap("assets/maps/sneique.tmx", NULL);
+	// TLN_SetLayerTilemap(0, tilemap);
+
+	TLN_LoadWorld("assets/maps/sneique.tmx", 0);
+	TLN_Tilemap map = TLN_GetLayerTilemap(0);
+	int rows = TLN_GetTilemapRows(map);
+	int columns = TLN_GetTilemapCols(map);
+
+	printf("Rows: %i; Columns: %i\n", rows, columns);
+
+	for (int x = 0; x < columns; x++) {
+		for (int y = 0; y < rows; y++) {
+			TLN_Tile tile = TLN_GetTilemapTiles(map, x, y);
+
+			if (!tile)
+				continue;
+
+			printf("Tile: %i; X: %i; Y: %i;\n", tile->index, x, y);
+		}
+	}
+
 	ObjectManager* objectManager = Singleton<ObjectManager>::GetInstance();
 	SpriteManager* spriteManager = Singleton<SpriteManager>::GetInstance();
 	InputManager* inputManager = Singleton<InputManager>::GetInstance();
@@ -84,7 +105,7 @@ int main(int argc, char* argv[]) {
 	FoodObject* foodObject = objectManager->CreateObject<FoodObject>("food");
 	SnakeObject* snakeObject = objectManager->CreateObject<SnakeObject>("snake");
 
-	TLN_SetBGColor(0, 0, 0);
+	TLN_SetBGColor(255, 255, 255);
 
 	// Main application loop
 	while (!quit) {
