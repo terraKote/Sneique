@@ -16,7 +16,6 @@
 #define WIDTH 640
 #define HEIGHT 480
 
-
 const int FPS = 60;
 const int MILLISECONDS_PER_FRAME = 1000 / FPS;
 
@@ -28,12 +27,6 @@ int main(int argc, char* argv[]) {
 	dstrect.y = 0;
 	dstrect.w = WIDTH;
 	dstrect.h = HEIGHT;
-
-
-
-	//int seed = std::time(NULL);
-	//std::srand(seed);
-	//Vectormath::Vector2 fruitPosition = GetRandomPosition();
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
@@ -67,12 +60,8 @@ int main(int argc, char* argv[]) {
 	SDL_Event evt;
 
 	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, MAX_SPRITES, 0);
-	//TLN_SetLoadPath("assets/sprites");
 
-	TLN_Spriteset spriteset;
-
-	//spriteset = TLN_LoadSpriteset("snake");
-	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
+	TLN_Spriteset spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
 	ObjectManager* objectManager = Singleton<ObjectManager>::GetInstance();
 	SpriteManager* spriteManager = Singleton<SpriteManager>::GetInstance();
@@ -110,15 +99,16 @@ int main(int argc, char* argv[]) {
 		}
 
 		// Game loop limit
-		int ticksToWait = MILLISECONDS_PER_FRAME - (SDL_GetTicks() - millisecondsPassed);
+		uint32_t currentTicks = SDL_GetTicks();
+		int ticksToWait = MILLISECONDS_PER_FRAME - (currentTicks - millisecondsPassed);
 
 		if (ticksToWait > 0 && ticksToWait <= MILLISECONDS_PER_FRAME)
 		{
 			SDL_Delay(ticksToWait);
 		}
 
-		double deltaTime = (SDL_GetTicks() - millisecondsPassed) / 1000.0;
-		millisecondsPassed = SDL_GetTicks();
+		double deltaTime = (currentTicks - millisecondsPassed) / 1000.0;
+		millisecondsPassed = currentTicks;
 
 		// Game logic
 		for (auto& element : objectManager->GetCreatedObjects())
