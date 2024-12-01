@@ -58,8 +58,9 @@ void SnakeObject::Update(double deltaTime) {
 	// Set cells free
 	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
 		Vectormath::Vector2 segment = _snakeBody[i];
-		unsigned int cellIndex = (segment.getX() / UNIT_SIZE) * (segment.getY() / UNIT_SIZE);
-		_gridManager->SetCellState(cellIndex, true);
+		int x = static_cast<int>(segment.getX() / UNIT_SIZE);
+		int y = static_cast<int>(segment.getY() / UNIT_SIZE);
+		_gridManager->SetCellState(x, y, true);
 	}
 
 	// Handle the snake movement
@@ -81,8 +82,9 @@ void SnakeObject::Update(double deltaTime) {
 	// Set cells taken
 	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
 		Vectormath::Vector2 segment = _snakeBody[i];
-		unsigned int cellIndex = (segment.getX() / UNIT_SIZE) * (segment.getY() / UNIT_SIZE);
-		_gridManager->SetCellState(cellIndex, false);
+		int x = static_cast<int>(segment.getX() / UNIT_SIZE);
+		int y = static_cast<int>(segment.getY() / UNIT_SIZE);
+		_gridManager->SetCellState(x, y, false);
 	}
 
 	// Move the food

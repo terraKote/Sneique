@@ -12,6 +12,7 @@
 #include "InputManager.h"
 #include "FoodObject.h"
 #include "GridManager.h"
+#include "WorldManager.h"
 
 #define WIDTH 640
 #define HEIGHT 480
@@ -28,12 +29,6 @@ int main(int argc, char* argv[]) {
 	dstrect.y = 0;
 	dstrect.w = WIDTH;
 	dstrect.h = HEIGHT;
-
-
-
-	//int seed = std::time(NULL);
-	//std::srand(seed);
-	//Vectormath::Vector2 fruitPosition = GetRandomPosition();
 
 	uint8_t* rt_pixels = { 0 };
 	int rt_pitch = { 0 };
@@ -67,37 +62,18 @@ int main(int argc, char* argv[]) {
 	SDL_Event evt;
 
 	TLN_Init(RENDER_WIDTH, RENDER_HEIGHT, 2, MAX_SPRITES, 0);
-	//TLN_SetLoadPath("assets/sprites");
 
 	TLN_Spriteset spriteset;
 
-	//spriteset = TLN_LoadSpriteset("snake");
 	spriteset = TLN_LoadSpriteset("assets/sprites/snake");
 
-	// TLN_Tilemap tilemap = TLN_LoadTilemap("assets/maps/sneique.tmx", NULL);
-	// TLN_SetLayerTilemap(0, tilemap);
-
-	TLN_LoadWorld("assets/maps/sneique.tmx", 0);
-	TLN_Tilemap map = TLN_GetLayerTilemap(0);
-	int rows = TLN_GetTilemapRows(map);
-	int columns = TLN_GetTilemapCols(map);
-
-	printf("Rows: %i; Columns: %i\n", rows, columns);
-
-	for (int x = 0; x < columns; x++) {
-		for (int y = 0; y < rows; y++) {
-			TLN_Tile tile = TLN_GetTilemapTiles(map, x, y);
-
-			if (!tile)
-				continue;
-
-			printf("Tile: %i; X: %i; Y: %i;\n", tile->index, x, y);
-		}
-	}
 
 	ObjectManager* objectManager = Singleton<ObjectManager>::GetInstance();
 	SpriteManager* spriteManager = Singleton<SpriteManager>::GetInstance();
 	InputManager* inputManager = Singleton<InputManager>::GetInstance();
+	WorldManager* worldManager = Singleton<WorldManager>::GetInstance();
+
+	worldManager->Load("assets/maps/sneique.tmx", 0);
 
 	spriteManager->LoadSpriteset("assets/sprites/snake", "snake");
 
