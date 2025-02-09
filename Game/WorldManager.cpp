@@ -13,6 +13,10 @@ unsigned int LevelData::GetColumnCount() const
 bool LevelData::TileExists(int x, int y) const
 {
 	TLN_Tile tile = TLN_GetTilemapTiles(_tilemap, x, y);
+
+	if (tile == NULL)
+		return false;
+
 	return tile->value != 0;
 }
 

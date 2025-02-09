@@ -33,6 +33,7 @@ private:
 	ObjectManager* _objectManager;
 	FoodObject* _foodObject;
 	GridManager* _gridManager;
+	WorldManager* _worldManager;
 
 public:
 	SnakeObject(int id, std::string name) : Object(id, name) {
@@ -44,6 +45,7 @@ public:
 		_spriteManager = Singleton<SpriteManager>::GetInstance();
 		_inputManager = Singleton<InputManager>::GetInstance();
 		_objectManager = Singleton<ObjectManager>::GetInstance();
+		_worldManager = Singleton<WorldManager>::GetInstance();
 
 		for (const auto bodyBlock : _snakeBody)
 		{

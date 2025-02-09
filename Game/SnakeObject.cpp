@@ -41,6 +41,17 @@ void SnakeObject::Update(double deltaTime) {
 		addSegment = true;
 	}
 
+	// Check collisiton with the world
+	int headX = static_cast<int>(head.getX());
+	int headY = static_cast<int>(head.getY());
+	LevelData levelData = _worldManager->GetLevelData(0);
+
+	if (levelData.TileExists(headX / UNIT_SIZE, headY / UNIT_SIZE))
+	{
+		Reset();
+		return;
+	}
+
 	// Check for collision with itself
 	for (unsigned int i = 0; i < _snakeBody.size(); i++) {
 		// Skip the head
@@ -111,7 +122,8 @@ void SnakeObject::Update(double deltaTime) {
 
 void SnakeObject::Reset() {
 	_currentMoveTime = 0;
-	_snakeBody = { Vectormath::Vector2{4 * UNIT_SIZE,0}, Vectormath::Vector2{5 * UNIT_SIZE,0}, Vectormath::Vector2{6 * UNIT_SIZE,0} };
+	float y = 3 * UNIT_SIZE;
+	_snakeBody = { Vectormath::Vector2{4 * UNIT_SIZE,y}, Vectormath::Vector2{5 * UNIT_SIZE,y}, Vectormath::Vector2{6 * UNIT_SIZE,y} };
 	_currentDirection = Direction::Left;
 	_velocity = { 0, 0 };
 

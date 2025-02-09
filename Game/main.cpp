@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
 	FoodObject* foodObject = objectManager->CreateObject<FoodObject>("food");
 	SnakeObject* snakeObject = objectManager->CreateObject<SnakeObject>("snake");
 
-	TLN_SetBGColor(255, 255, 255);
+	TLN_SetBGColor(0, 0, 0);
 
 	// Main application loop
 	while (!quit) {
