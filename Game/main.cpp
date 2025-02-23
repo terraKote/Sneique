@@ -15,17 +15,45 @@
 #define APP_NAME "Sneique"
 
 int main(int argc, char* argv[]) {
-	int width = 640;
-	int height = 480;
+	const int width = 640;
+	const int height = 480;
+	const int targetFps = 60;
 
 	InitWindow(width, height, APP_NAME);
+	SetTargetFPS(targetFps);
+
+	Texture2D snakeSpritesheet = LoadTexture("assets/sprites/snake.png");
+	Rectangle srcRect = Rectangle{ 40, 24, 8, 8 };
+	Rectangle dstRect = Rectangle{ 0,0,8,8 };
+
+	Camera2D worldCamera = { 0 };
+	worldCamera.zoom = 1;
+
+	const int virtualWidth = 320;
+	const int virtualHeight = 240;
+	const float virtualRatio = static_cast<float>(virtualWidth) / static_cast<float>(virtualHeight);
+
+	RenderTexture2D renderTexture = LoadRenderTexture(virtualWidth, virtualHeight);
+
+	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(renderTexture.texture.width), -static_cast<float>(renderTexture.texture.height) };
+	Rectangle destRec = { -virtualRatio, -virtualRatio, width + (virtualRatio * 2), height + (virtualRatio * 2) };
 
 	while (!WindowShouldClose()) {
-		BeginDrawing();
+		BeginTextureMode(renderTexture);
 		ClearBackground(RAYWHITE);
+		BeginMode2D(worldCamera);
+		DrawTexturePro(snakeSpritesheet, srcRect, dstRect, { 0, 0 }, 0, WHITE);
+		EndMode2D();
+		EndTextureMode();
 
+		BeginDrawing();
+		ClearBackground(RED);
+		DrawTexturePro(renderTexture.texture, sourceRec, destRec, { 0, 0 }, 0.0f, WHITE);
 		EndDrawing();
 	}
+
+	UnloadTexture(snakeSpritesheet);
+	UnloadRenderTexture(renderTexture);
 
 	CloseWindow();
 
