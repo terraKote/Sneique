@@ -161,24 +161,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FoodObject.cpp" />
-    <ClCompile Include="GridManager.cpp" />
-    <ClCompile Include="InputManager.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Singleton.cpp" />
-    <ClCompile Include="SnakeObject.cpp" />
-    <ClCompile Include="SpriteManager.cpp" />
+    <ClCompile Include="src\FoodObject.cpp" />
+    <ClCompile Include="src\GridManager.cpp" />
+    <ClCompile Include="src\InputManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ObjectManager.cpp" />
+    <ClCompile Include="src\Singleton.cpp" />
+    <ClCompile Include="src\SnakeObject.cpp" />
+    <ClCompile Include="src\SpriteManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Constants.h" />
-    <ClInclude Include="FoodObject.h" />
-    <ClInclude Include="GridManager.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="Singleton.h" />
-    <ClInclude Include="SnakeObject.h" />
-    <ClInclude Include="SpriteManager.h" />
+    <ClInclude Include="src\Constants.h" />
+    <ClInclude Include="src\FoodObject.h" />
+    <ClInclude Include="src\GridManager.h" />
+    <ClInclude Include="src\InputManager.h" />
+    <ClInclude Include="src\ObjectManager.h" />
+    <ClInclude Include="src\Singleton.h" />
+    <ClInclude Include="src\SnakeObject.h" />
+    <ClInclude Include="src\SpriteManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
