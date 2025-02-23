@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <raylib.h>
+
 #include "Constants.h"
 #include "ObjectManager.h"
 #include "SpriteManager.h"
@@ -10,21 +12,22 @@
 #include "FoodObject.h"
 #include "GridManager.h"
 
-#define WIDTH 640
-#define HEIGHT 480
-
-
-const int FPS = 60;
-const int MILLISECONDS_PER_FRAME = 1000 / FPS;
+#define APP_NAME "Sneique"
 
 int main(int argc, char* argv[]) {
-	//SDL_Rect dstrect = { 0 };
-	//dstrect.x = 0;
-	//dstrect.y = 0;
-	//dstrect.w = WIDTH;
-	//dstrect.h = HEIGHT;
+	int width = 640;
+	int height = 480;
 
+	InitWindow(width, height, APP_NAME);
 
+	while (!WindowShouldClose()) {
+		BeginDrawing();
+		ClearBackground(RAYWHITE);
+
+		EndDrawing();
+	}
+
+	CloseWindow();
 
 	////int seed = std::time(NULL);
 	////std::srand(seed);
