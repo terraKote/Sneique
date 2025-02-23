@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
 	worldCamera.zoom = 1;
 
 	// Virtual texture setup
-	const int virtualWidth = 320;
-	const int virtualHeight = 240;
+	const int virtualWidth = 160;
+	const int virtualHeight = 120;
 	const float virtualRatio = static_cast<float>(virtualWidth) / static_cast<float>(virtualHeight);
 
 	RenderTexture2D renderTexture = LoadRenderTexture(virtualWidth, virtualHeight);
