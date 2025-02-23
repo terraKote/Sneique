@@ -1,13 +1,13 @@
 #pragma once
 #include <cstdint>
-#include <SDL.h>
+//#include <SDL.h>
 #include "Singleton.h"
 
-#define SNAKE_KEY_UP SDLK_UP
-#define SNAKE_KEY_DOWN SDLK_DOWN
-#define SNAKE_KEY_LEFT SDLK_LEFT
-#define SNAKE_KEY_RIGHT SDLK_RIGHT
-#define SNAKE_KEY_ACTION SDLK_z
+#define SNAKE_KEY_UP //SDLK_UP
+#define SNAKE_KEY_DOWN //SDLK_DOWN
+#define SNAKE_KEY_LEFT //SDLK_LEFT
+#define SNAKE_KEY_RIGHT //SDLK_RIGHT
+#define SNAKE_KEY_ACTION //SDLK_z
 
 class InputManager
 {

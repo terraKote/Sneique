@@ -2,8 +2,8 @@
 #include <unordered_map>
 #include <string>
 
-#include <vectormath.hpp>
-#include <Tilengine.h>
+//#include <vectormath.hpp>
+//#include <Tilengine.h>
 
 #include "Constants.h"
 #include "Singleton.h"
@@ -11,7 +11,7 @@
 struct SpriteData {
 private:
 	unsigned int _index;
-	Vectormath::Vector2 _position;
+	//Vectormath::Vector2 _position;
 	unsigned int _spriteIndex;
 	std::string _spriteset;
 	bool _isReleased;
@@ -20,7 +20,7 @@ public:
 	SpriteData() = default;
 	SpriteData(unsigned int index) {
 		_index = index;
-		_position = { 0, 0 };
+		//_position = { 0, 0 };
 		_spriteIndex = 0;
 		_spriteset = { 0 };
 		_isReleased = true;
@@ -31,13 +31,13 @@ public:
 		return _index;
 	}
 
-	void SetPosition(Vectormath::Vector2 position) {
-		_position = position;
-	}
+	//void SetPosition(Vectormath::Vector2 position) {
+	//	_position = position;
+	//}
 
-	Vectormath::Vector2 GetPosition() const {
-		return _position;
-	}
+	//Vectormath::Vector2 GetPosition() const {
+	//	return _position;
+	//}
 
 	void SetSpriteIndex(unsigned int index) {
 		_spriteIndex = index;
@@ -73,7 +73,7 @@ class SpriteManager
 	friend class Singleton<SpriteManager>;
 private:
 	SpriteData _createdSprites[MAX_SPRITES];
-	std::unordered_map<std::string, TLN_Spriteset> _loadedSpritesets;
+	//std::unordered_map<std::string, TLN_Spriteset> _loadedSpritesets;
 
 	SpriteManager();
 	~SpriteManager();
