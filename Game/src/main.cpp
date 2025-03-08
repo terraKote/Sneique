@@ -1,69 +1,98 @@
-#include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include "raylib.h"
+#include <vector>
 
-#include <raylib.h>
+struct Snake {
+	std::vector<Vector2> body;
+	Vector2 direction;
+};
 
-#include "Constants.h"
-#include "ObjectManager.h"
-#include "SpriteManager.h"
-#include "SnakeObject.h"
-#include "InputManager.h"
-#include "FoodObject.h"
-#include "GridManager.h"
+void UpdateSnake(Snake& snake) {
+	// Move the snake
+	for (int i = snake.body.size() - 1; i > 0; --i) {
+		snake.body[i] = snake.body[i - 1];
+	}
+	snake.body[0].x += snake.direction.x;
+	snake.body[0].y += snake.direction.y;
+}
 
-#define APP_NAME "Sneique"
+void DrawGame(const Snake& snake, const Vector2& food) {
+	const int cellSize = 40;
 
-int main(int argc, char* argv[]) {
+	// Draw food
+	DrawRectangle(food.x * cellSize, food.y * cellSize, cellSize, cellSize, RED);
 
-	// Window setup
-	const int width = 640;
-	const int height = 480;
-	const int targetFps = 60;
+	// Draw snake
+	for (const auto& segment : snake.body) {
+		DrawRectangle(segment.x * cellSize, segment.y * cellSize, cellSize, cellSize, GREEN);
+	}
+}
 
-	InitWindow(width, height, APP_NAME);
-	SetTargetFPS(targetFps);
+bool CheckCollision(const Snake& snake) {
+	// Check wall collision
+	if (snake.body[0].x < 0 || snake.body[0].x >= 20 ||
+		snake.body[0].y < 0 || snake.body[0].y >= 20) {
+		return true;
+	}
 
-	// Camera setup
-	Camera2D worldCamera = { 0 };
-	worldCamera.zoom = 1;
+	// Check self-collision
+	for (size_t i = 1; i < snake.body.size(); ++i) {
+		if (snake.body[0].x == snake.body[i].x && snake.body[0].y == snake.body[i].y) {
+			return true;
+		}
+	}
 
-	// Virtual texture setup
-	const int virtualWidth = 160;
-	const int virtualHeight = 120;
-	const float virtualRatio = static_cast<float>(virtualWidth) / static_cast<float>(virtualHeight);
+	return false;
+}
 
-	RenderTexture2D renderTexture = LoadRenderTexture(virtualWidth, virtualHeight);
+int main() {
+	const int screenWidth = 800;
+	const int screenHeight = 600;
+	const int cellSize = 40;
 
-	Rectangle sourceRec = { 0.0f, 0.0f, static_cast<float>(renderTexture.texture.width), -static_cast<float>(renderTexture.texture.height) };
-	Rectangle destRec = { -virtualRatio, -virtualRatio, width + (virtualRatio * 2), height + (virtualRatio * 2) };
+	InitWindow(screenWidth, screenHeight, "Snake Game");
+	SetTargetFPS(60);
 
-	// Sprite setup
-	Texture2D snakeSpritesheet = LoadTexture("assets/sprites/snake.png");
-	Rectangle srcRect = Rectangle{ 40, 24, 8, 8 };
-	Rectangle dstRect = Rectangle{ 0,0,8,8 };
+	Snake snake = { {{5, 5}}, {1, 0} };
+	Vector2 food = { GetRandomValue(0, 19), GetRandomValue(0, 19) };
+
+	float moveInterval = 0.2f; // Time between snake movements (in seconds)
+	float moveTimer = 0.0f;    // Timer to track elapsed time
 
 	while (!WindowShouldClose()) {
-		// Render to virtual texture
-		BeginTextureMode(renderTexture);
-		ClearBackground(RAYWHITE);
-		BeginMode2D(worldCamera);
-		DrawTexturePro(snakeSpritesheet, srcRect, dstRect, { 0, 0 }, 0, WHITE);
-		EndMode2D();
-		EndTextureMode();
+		float deltaTime = GetFrameTime(); // Get time since last frame
 
-		// Render to the screen
+		// Input handling
+		if (IsKeyPressed(KEY_RIGHT)) snake.direction = { 1, 0 };
+		if (IsKeyPressed(KEY_LEFT)) snake.direction = { -1, 0 };
+		if (IsKeyPressed(KEY_UP)) snake.direction = { 0, -1 };
+		if (IsKeyPressed(KEY_DOWN)) snake.direction = { 0, 1 };
+
+		// Update snake movement timer
+		moveTimer += deltaTime;
+		if (moveTimer >= moveInterval) {
+			moveTimer = 0.0f; // Reset timer
+			// Update snake
+			UpdateSnake(snake);
+		}
+
+		// Check for food collision
+		if (snake.body[0].x == food.x && snake.body[0].y == food.y) {
+			snake.body.push_back(snake.body.back());
+			food = { static_cast<float>(GetRandomValue(0, 10)), static_cast<float>(GetRandomValue(0, 10)) };
+		}
+
+		//// Check for game over
+		//if (CheckCollision(snake)) {
+		//	break; // End game
+		//}
+
+		// Draw
 		BeginDrawing();
-		ClearBackground(RED);
-		DrawTexturePro(renderTexture.texture, sourceRec, destRec, { 0, 0 }, 0.0f, WHITE);
+		ClearBackground(RAYWHITE);
+		DrawGame(snake, food);
 		EndDrawing();
 	}
 
-	// Unload textures
-	UnloadTexture(snakeSpritesheet);
-	UnloadRenderTexture(renderTexture);
-
-	// Close the app
 	CloseWindow();
 	return 0;
 }

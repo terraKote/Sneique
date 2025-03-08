@@ -1,9 +1,0 @@
-#pragma once
-
-#define RENDER_WIDTH 160
-#define RENDER_HEIGHT 120
-
-#define UNIT_SIZE 8
-#define MAX_SPRITES 1024
-
-#define GRID_SIZE (RENDER_WIDTH / UNIT_SIZE) * (RENDER_HEIGHT / UNIT_SIZE)
